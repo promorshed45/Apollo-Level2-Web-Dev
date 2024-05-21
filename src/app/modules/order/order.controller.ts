@@ -17,7 +17,7 @@ const createOrder = async (req: Request, res: Response) => {
     } catch (err: any) {
         res.status(500).json({
             success: false,
-            message: err.message || 'Order created faild',
+            message: err.message || 'Order created failed',
             error: err
         });
     }
@@ -37,7 +37,7 @@ const getAllOrder = async (req: Request, res: Response) => {
     } catch (err: any) {
         res.status(500).json({
             success: false,
-            message: err.message || 'Orders fetched faild',
+            message: err.message || 'Orders fetched failed',
             error: err
         });
     }

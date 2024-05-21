@@ -12,11 +12,17 @@ const getAllProductFromDb = async (product: Product)=>{
 }
 
 const getProductByIdFromDb = async (productId: string)=>{
-    const result = await ProductModel.findOne({_id: productId});
+    const result = await ProductModel.findByIdAndUpdate({_id: productId});
+    return result;
+}
+
+const updateProductByIdFromDb = async (productId: string, updateProduct: any)=>{
+    const result = await ProductModel.findOneAndUpdate({_id: productId}, updateProduct);
     return result;
 }
 export const ProductService = {
     createdProducTtoDb,
     getAllProductFromDb,
-    getProductByIdFromDb
+    getProductByIdFromDb,
+    updateProductByIdFromDb
 }
