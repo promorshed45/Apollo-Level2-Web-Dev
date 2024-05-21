@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { ProductService } from "./product.service";
 
 
+// Create a New Product
 const createNewProduct = async (req: Request, res: Response) => {
     try {
         const product = req.body;
@@ -22,6 +23,7 @@ const createNewProduct = async (req: Request, res: Response) => {
     }
 }
 
+// Retrieve a List of All Products
 const getAllProduct = async (req: Request, res: Response) => {
     try {
         const product = req.body;
@@ -42,7 +44,7 @@ const getAllProduct = async (req: Request, res: Response) => {
     }
 }
 
-
+// Retrieve a Specific Product by ID
 const getProductById = async (req: Request, res: Response) => {
     try {
         const { productId } = req.params;
@@ -63,6 +65,7 @@ const getProductById = async (req: Request, res: Response) => {
     }
 }
 
+// Update Product Information
 const updateProductById = async (req: Request, res: Response) => {
     try {
         const { productId } = req.params;
@@ -88,6 +91,7 @@ const updateProductById = async (req: Request, res: Response) => {
     }
 }
 
+// Delete a Product
 const deleteProductById = async (req: Request, res: Response) => {
     try {
         const { productId } = req.params;
@@ -112,10 +116,36 @@ const deleteProductById = async (req: Request, res: Response) => {
     }
 }
 
+
+// Search a product
+const searchProductByName = async (req: Request, res: Response)=>{
+    try {
+        const searchTerm = req.query.searchTerm as string;
+        const searchRegex = new RegExp(searchTerm, "i");
+        const result = await ProductService.searchProductByPhoneNameFromDb(searchRegex)
+        console.log(result);
+
+        // send respone
+        res.status(200).json({
+            success: true,
+            message: `Products matching search term ${result} fetched successfully!`,
+            data: result,
+        });
+    } catch (err: any) {
+        res.status(500).json({
+            success: false,
+            message: `Products matching search term ${req.params.searchTerm} fetched failed!`,
+            error: err
+        });
+    }
+}
+
+
 export const ProductController = {
     createNewProduct,
     getAllProduct,
     getProductById,
     updateProductById,
-    deleteProductById
+    deleteProductById,
+    searchProductByName
 }
