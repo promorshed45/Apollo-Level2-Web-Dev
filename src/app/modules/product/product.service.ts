@@ -9,7 +9,7 @@ const createdProducTtoDb = async (product: Product) => {
 }
 
 // Retrieve a List of All Products
-const getAllProductFromDb = async (product: Product)=>{
+const getAllProductFromDb = async ()=>{
     const result = await ProductModel.find();
     return result;
 }
@@ -33,12 +33,13 @@ const deletedProductByIdFromDb = async (productId: string)=>{
 }
 
 // Search a product
-const searchProductByPhoneNameFromDb = async (searchRegex: any)=>{
-    const result = await ProductModel.find({
-        name: searchRegex
-    })
+const searchProductByPhoneNameFromDb = async () => {
+    // const result = await ProductModel.find({ name: { $regex: name, $options: 'i' } });
+    const result = await ProductModel.find();
+
     return result;
-}
+};
+
 
 
 

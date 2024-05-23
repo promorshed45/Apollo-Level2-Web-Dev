@@ -1,12 +1,42 @@
+import { ProductModel } from "../product/product.model";
 import { Order } from "./order.interface";
 import { OrderModel } from "./order.model";
 
 const createdOrderToDb = async (order: Order) => {
-    const result = await OrderModel.create(order);
-    return result;
-}
+    try {
+        // Check product is exists
+        const product = await ProductModel.findById(order.productId);
+        if (!product) {
+            return { success: false, message: "Product not found" };
+        }
 
-const getAllOrderFromDb = async (order: Order) => {
+        // Calculate updated inventory
+        const updatedInventory = product.inventory.quantity - order.quantity;
+
+        // Check inventory is sufficient
+        if (updatedInventory < 0) {
+            return { success: false, message: "Insufficient inventory" };
+        }
+
+        // Update product inventory and stock status
+        const inCurrentStock = updatedInventory > 0;
+        await ProductModel.updateOne(
+            { _id: product.id },
+            { $set: { 'inventory.quantity': updatedInventory, inCurrentStock: inCurrentStock } },
+            { new: true }
+        );
+
+        // Create new order
+        const result = await OrderModel.create(order);
+        return { success: true, data: result };
+    } catch (error) {
+        console.error("Error creating order:", error);
+        return { success: false, message: "An error occurred while creating the order" };
+    }
+};
+
+
+const getAllOrderFromDb = async () => {
     const result = await OrderModel.find();
     return result;
 }

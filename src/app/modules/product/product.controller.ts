@@ -26,11 +26,9 @@ const createNewProduct = async (req: Request, res: Response) => {
 }
 
 // Retrieve a List of All Products
-const getAllProduct = async (req: Request, res: Response) => {
+const getAllProducts = async (req: Request, res: Response) => {
     try {
-        const product = req.body;
-        console.log(product);
-        const result = await ProductService.createdProducTtoDb(product);
+        const result = await ProductService.getAllProductFromDb();
         // send respone
         res.status(200).json({
             success: true,
@@ -73,7 +71,6 @@ const updateProductById = async (req: Request, res: Response) => {
         const { productId } = req.params;
         const updatedData = req.body;
         const updatedProduct = await ProductService.updateProductByIdFromDb(productId, updatedData);
-        console.log(updatedProduct);
         // send respone
         if (updatedProduct) {
             res.status(200).json({
@@ -98,7 +95,6 @@ const deleteProductById = async (req: Request, res: Response) => {
     try {
         const { productId } = req.params;
         const deleteProduct = await ProductService.deletedProductByIdFromDb(productId);
-        console.log(deleteProduct);
         // send respone
         if (deleteProduct) {
             res.status(200).json({
@@ -120,32 +116,37 @@ const deleteProductById = async (req: Request, res: Response) => {
 
 
 // Search a product
-const searchProductByName = async (req: Request, res: Response)=>{
+const searchProductByName = async (req: Request, res: Response) => {
     try {
-        const searchTerm = req.query.searchTerm as string;
-        const searchRegex = new RegExp(searchTerm, "i");
-        const result = await ProductService.searchProductByPhoneNameFromDb(searchRegex)
+        const { name } = req.query;
+
+        if (!name || typeof name !== 'string') {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid or missing name query parameter',
+            });
+        }
+
+        const result = await ProductService.searchProductByPhoneNameFromDb();
         console.log(result);
 
-        // send respone
         res.status(200).json({
             success: true,
-            message: `Products matching search term ${result} fetched successfully!`,
+            message: `Products matching search term  fetched successfully!`,
             data: result,
         });
     } catch (err: any) {
         res.status(500).json({
             success: false,
-            message: `Products matching search term ${req.params.searchTerm} fetched failed!`,
-            error: err
+            message: `Failed to fetch products matching search term !`,
+            error: err.message || err,
         });
     }
-}
-
+};
 
 export const ProductController = {
     createNewProduct,
-    getAllProduct,
+    getAllProducts,
     getProductById,
     updateProductById,
     deleteProductById,

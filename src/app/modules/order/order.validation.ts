@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 // Order Schema added Zod validation
-const orderSchema = z.object({
+const orderSchemaValidation = z.object({
     email: z.string().email('Invalid email address').min(1, 'Email is required'),
     productId: z.string().min(1, { message: 'Product ID is required' }),
     price: z.number().nonnegative({ message: 'Price must be a non-negative number' }).min(0, { message: 'Price is required' }),
@@ -9,4 +9,4 @@ const orderSchema = z.object({
 });
 
 
-export default orderSchema;
+export default orderSchemaValidation;
