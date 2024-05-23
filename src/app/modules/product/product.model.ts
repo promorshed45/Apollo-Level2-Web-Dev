@@ -30,10 +30,10 @@ const productSchema = new Schema<Product>({
 });
 
 
-productSchema.pre('find', function(next){
-    this.find({ name: { $regex: name, $options: 'i' } })
-    next();
-})
+// productSchema.pre('find', function(next){
+//     this.find({ name: { $regex: name, $options: 'i' } })
+//     next();
+// })
 
 
 // Create model

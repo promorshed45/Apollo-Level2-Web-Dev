@@ -142,7 +142,7 @@ const searchProductByName = async (req: Request, res: Response) => {
             error: err.message || err,
         });
     }
-};
+};  
 
 export const ProductController = {
     createNewProduct,

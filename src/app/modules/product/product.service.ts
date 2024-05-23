@@ -34,8 +34,8 @@ const deletedProductByIdFromDb = async (productId: string)=>{
 
 // Search a product
 const searchProductByPhoneNameFromDb = async () => {
-    // const result = await ProductModel.find({ name: { $regex: name, $options: 'i' } });
-    const result = await ProductModel.find();
+    const result = await ProductModel.find({ name: { $regex: name, $options: 'i' } });
+    // const result = await ProductModel.findOne();
 
     return result;
 };

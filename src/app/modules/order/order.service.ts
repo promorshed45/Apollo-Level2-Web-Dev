@@ -6,6 +6,9 @@ const createdOrderToDb = async (order: Order) => {
     try {
         // Check product is exists
         const product = await ProductModel.findById(order.productId);
+
+        const orderproduct = order.productId;
+        console.log(orderproduct);
         if (!product) {
             return { success: false, message: "Product not found" };
         }
@@ -22,7 +25,7 @@ const createdOrderToDb = async (order: Order) => {
         const inCurrentStock = updatedInventory > 0;
         await ProductModel.updateOne(
             { _id: product.id },
-            { $set: { 'inventory.quantity': updatedInventory, inCurrentStock: inCurrentStock } },
+            { $set: { 'inventory.quantity': updatedInventory, 'inventory.inStock': inCurrentStock } },
             { new: true }
         );
 
@@ -31,7 +34,7 @@ const createdOrderToDb = async (order: Order) => {
         return { success: true, data: result };
     } catch (error) {
         console.error("Error creating order:", error);
-        return { success: false, message: "An error occurred while creating the order" };
+        return { success: false, message: "Order created Failed!" };
     }
 };
 
