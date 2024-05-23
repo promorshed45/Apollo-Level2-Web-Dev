@@ -17,7 +17,7 @@ const inventorySchema = new Schema<Inventory>({
 
 // Product Schema
 const productSchema = new Schema<Product>({
-    name: { type: String, unique: true, required: [true, 'Product name is required'] },
+    name: { type: String, required: [true, 'Product name is required'] },
     description: { type: String, required: [true, 'Product description is required'] },
     price: { type: Number, required: [true, 'Product price is required'] },
     category: { type: String, required: [true, 'Product category is required'] },
@@ -29,11 +29,6 @@ const productSchema = new Schema<Product>({
     inventory: inventorySchema,
 });
 
-
-// productSchema.pre('find', function(next){
-//     this.find({ name: { $regex: name, $options: 'i' } })
-//     next();
-// })
 
 
 // Create model

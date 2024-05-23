@@ -9,7 +9,7 @@ const createNewProduct = async (req: Request, res: Response) => {
         const product = req.body;
         const productValidationData = productSchemaValidation.parse(product);
         const result = await ProductService.createdProducTtoDb(productValidationData);
-        
+
         // send respone
         res.status(200).json({
             success: true,
@@ -28,7 +28,16 @@ const createNewProduct = async (req: Request, res: Response) => {
 // Retrieve a List of All Products
 const getAllProducts = async (req: Request, res: Response) => {
     try {
-        const result = await ProductService.getAllProductFromDb();
+        const { searchTerm } = req.query;
+
+        if (searchTerm) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid search term parameter',
+            });
+        }
+        const result = await ProductService.getAllProductFromDb(searchTerm as string);
+
         // send respone
         res.status(200).json({
             success: true,
@@ -74,13 +83,13 @@ const updateProductById = async (req: Request, res: Response) => {
         // send respone
         if (updatedProduct) {
             res.status(200).json({
-              success: true,
-              message: "Product updated successfully!",
-              data: updatedProduct,
+                success: true,
+                message: "Product updated successfully!",
+                data: updatedProduct,
             });
-          } else {
+        } else {
             res.status(404).json({ message: 'Product updated failed' });
-          }
+        }
     } catch (err: any) {
         res.status(500).json({
             success: false,
@@ -98,13 +107,13 @@ const deleteProductById = async (req: Request, res: Response) => {
         // send respone
         if (deleteProduct) {
             res.status(200).json({
-              success: true,
-              message: "Product deleted successfully!",
-              data: deleteProduct,
+                success: true,
+                message: "Product deleted successfully!",
+                data: deleteProduct,
             });
-          } else {
+        } else {
             res.status(404).json({ message: 'Product deleted failed' });
-          }
+        }
     } catch (err: any) {
         res.status(500).json({
             success: false,
@@ -115,40 +124,11 @@ const deleteProductById = async (req: Request, res: Response) => {
 }
 
 
-// Search a product
-const searchProductByName = async (req: Request, res: Response) => {
-    try {
-        const { name } = req.query;
-
-        if (!name || typeof name !== 'string') {
-            return res.status(400).json({
-                success: false,
-                message: 'Invalid or missing name query parameter',
-            });
-        }
-
-        const result = await ProductService.searchProductByPhoneNameFromDb();
-        console.log(result);
-
-        res.status(200).json({
-            success: true,
-            message: `Products matching search term  fetched successfully!`,
-            data: result,
-        });
-    } catch (err: any) {
-        res.status(500).json({
-            success: false,
-            message: `Failed to fetch products matching search term !`,
-            error: err.message || err,
-        });
-    }
-};  
-
 export const ProductController = {
     createNewProduct,
     getAllProducts,
     getProductById,
     updateProductById,
     deleteProductById,
-    searchProductByName
+    // searchProductByName
 }

@@ -9,10 +9,19 @@ const createdProducTtoDb = async (product: Product) => {
 }
 
 // Retrieve a List of All Products
-const getAllProductFromDb = async ()=>{
-    const result = await ProductModel.find();
-    return result;
-}
+const getAllProductFromDb = async (searchTerm?: string) => {
+    const regex = searchTerm ? new RegExp(searchTerm, 'i') : undefined; 
+  
+    const products = await ProductModel.find({
+      $or: [
+        searchTerm ? { name: { $regex: regex } } : {}, 
+        searchTerm ? { description: { $regex: regex } } : {}, 
+        searchTerm ? { category: { $regex: regex } } : {}, 
+      ]
+    });
+  
+    return products;
+  };
 
 // Retrieve a Specific Product by ID
 const getProductByIdFromDb = async (productId: string)=>{
@@ -32,14 +41,6 @@ const deletedProductByIdFromDb = async (productId: string)=>{
     return result;
 }
 
-// Search a product
-const searchProductByPhoneNameFromDb = async () => {
-    const result = await ProductModel.find({ name: { $regex: name, $options: 'i' } });
-    // const result = await ProductModel.findOne();
-
-    return result;
-};
-
 
 
 
@@ -50,5 +51,5 @@ export const ProductService = {
     getProductByIdFromDb,
     updateProductByIdFromDb,
     deletedProductByIdFromDb,
-    searchProductByPhoneNameFromDb
+    // searchProductByPhoneNameFromDb
 }

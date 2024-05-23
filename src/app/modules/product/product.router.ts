@@ -8,7 +8,6 @@ router.get('/', ProductController.getAllProducts)
 router.get('/:productId', ProductController.getProductById)
 router.put('/:productId', ProductController.updateProductById)
 router.delete('/:productId', ProductController.deleteProductById)
-router.get('/search', ProductController.searchProductByName)
 
 
 
