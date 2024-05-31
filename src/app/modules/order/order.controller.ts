@@ -49,7 +49,7 @@ const getAllOrder = async (req: Request, res: Response) => {
 
 const searchOrdersByEmail = async (req: Request, res: Response) => {
     try {
-        const email = req.query.email as string;
+        const email = req.query.email || '';
         const result = await OrderService.searchOrdersByEmailFromDb(email);
         
         // send respone

@@ -4,41 +4,43 @@ import { ProductModel } from "./product.model";
 
 // Create a New Product
 const createdProducTtoDb = async (product: Product) => {
-    const result = await ProductModel.create(product);
-    return result;
+  const result = await ProductModel.create(product);
+  return result;
 }
 
 // Retrieve a List of All Products
 const getAllProductFromDb = async (searchTerm?: string) => {
-    const regex = searchTerm ? new RegExp(searchTerm, 'i') : undefined; 
-  
-    const products = await ProductModel.find({
-      $or: [
-        searchTerm ? { name: { $regex: regex } } : {}, 
-        searchTerm ? { description: { $regex: regex } } : {}, 
-        searchTerm ? { category: { $regex: regex } } : {}, 
-      ]
-    });
-  
-    return products;
-  };
+  const searchRegExp = searchTerm ? new RegExp(searchTerm, 'i') : '';
+
+  const filter = {
+    $or: [
+      { name: { $regex: searchRegExp } },
+      { description: { $regex: searchRegExp } },
+      { category: { $regex: searchRegExp } },
+    ]
+  }
+
+  const products = await ProductModel.find(filter);
+
+  return products;
+};
 
 // Retrieve a Specific Product by ID
-const getProductByIdFromDb = async (productId: string)=>{
-    const result = await ProductModel.findByIdAndUpdate({_id: productId});
-    return result;
+const getProductByIdFromDb = async (productId: string) => {
+  const result = await ProductModel.findByIdAndUpdate({ _id: productId });
+  return result;
 }
 
 // Update Product Information
-const updateProductByIdFromDb = async (productId: string, updateProduct: any)=>{
-    const result = await ProductModel.findOneAndUpdate({_id: productId}, updateProduct);
-    return result;
+const updateProductByIdFromDb = async (productId: string, updateProduct: any) => {
+  const result = await ProductModel.findOneAndUpdate({ _id: productId }, updateProduct);
+  return result;
 }
 
 // Delete a Product
-const deletedProductByIdFromDb = async (productId: string)=>{
-    const result = await ProductModel.deleteOne({_id: productId});
-    return result;
+const deletedProductByIdFromDb = async (productId: string) => {
+  const result = await ProductModel.deleteOne({ _id: productId });
+  return result;
 }
 
 
@@ -46,10 +48,10 @@ const deletedProductByIdFromDb = async (productId: string)=>{
 
 
 export const ProductService = {
-    createdProducTtoDb,
-    getAllProductFromDb,
-    getProductByIdFromDb,
-    updateProductByIdFromDb,
-    deletedProductByIdFromDb,
-    // searchProductByPhoneNameFromDb
+  createdProducTtoDb,
+  getAllProductFromDb,
+  getProductByIdFromDb,
+  updateProductByIdFromDb,
+  deletedProductByIdFromDb,
+  // searchProductByPhoneNameFromDb
 }
