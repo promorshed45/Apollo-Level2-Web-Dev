@@ -39,21 +39,22 @@ const createdOrderToDb = async (order: Order) => {
 };
 
 
-const getAllOrderFromDb = async () => {
-    const result = await OrderModel.find();
-    return result;
-}
-
 
 // Retrieve Orders by User Email
 const searchOrdersByEmailFromDb = async (email: string) => {
-    const result = await OrderModel.find({ email });
+    const searchRegExp = email ? new RegExp(email, 'i') : '';
+
+  const filter = {
+    $or: [
+      { email: { $regex: searchRegExp } }
+    ]
+  }
+    const result = await OrderModel.find(filter);
     return result;
 };
 
 
 export const OrderService = {
     createdOrderToDb,
-    getAllOrderFromDb,
     searchOrdersByEmailFromDb
 }

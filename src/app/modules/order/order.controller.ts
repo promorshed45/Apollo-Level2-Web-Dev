@@ -26,31 +26,11 @@ const createOrder = async (req: Request, res: Response) => {
     }
 }
 
-const getAllOrder = async (req: Request, res: Response) => {
-    try {
-        const result = await OrderService.getAllOrderFromDb();
-
-        // send respone
-    res.status(200).json({
-        success: true,
-        message: "Orders fetched successfully!",
-        data: result,
-      });
-    } catch (err: any) {
-        res.status(500).json({
-            success: false,
-            message: 'Orders fetched failed',
-            error: err
-        });
-    }
-}
-
-
 
 const searchOrdersByEmail = async (req: Request, res: Response) => {
     try {
         const email = req.query.email || '';
-        const result = await OrderService.searchOrdersByEmailFromDb(email);
+        const result = await OrderService.searchOrdersByEmailFromDb(email as string);
         
         // send respone
         res.status(200).json({
@@ -69,6 +49,5 @@ const searchOrdersByEmail = async (req: Request, res: Response) => {
 
 export const OrderController = {
     createOrder,
-    getAllOrder,
     searchOrdersByEmail
 }

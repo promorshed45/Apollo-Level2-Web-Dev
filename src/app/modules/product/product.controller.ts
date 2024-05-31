@@ -29,13 +29,6 @@ const createNewProduct = async (req: Request, res: Response) => {
 const getAllProducts = async (req: Request, res: Response) => {
     try {
         const searchTerm = req.query.searchTerm || '';
-
-        // if (searchTerm) {
-        //     return res.status(400).json({
-        //         success: false,
-        //         message: 'Invalid search term parameter',
-        //     });
-        // }
         const result = await ProductService.getAllProductFromDb(searchTerm as string);
 
         // send respone
