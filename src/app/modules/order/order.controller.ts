@@ -1,9 +1,8 @@
-
 import { Request, Response } from "express";
 import { OrderService } from "./order.service";
 import orderSchemaValidation from "./order.validation";
 
-
+// create order & update inventory
 const createOrder = async (req: Request, res: Response) => {
     try {
         // update inventory        
@@ -12,11 +11,11 @@ const createOrder = async (req: Request, res: Response) => {
         const result = await OrderService.createdOrderToDb(orderValidationData)
 
         // send respone
-    res.status(200).json({
-        success: true,
-        message: "Order created successfully!",
-        data: result,
-      });
+        res.status(200).json({
+            success: true,
+            message: "Order created successfully!",
+            data: result,
+        });
     } catch (err: any) {
         res.status(500).json({
             success: false,
@@ -26,12 +25,12 @@ const createOrder = async (req: Request, res: Response) => {
     }
 }
 
-
-const searchOrdersByEmail = async (req: Request, res: Response) => {
+// get all orders and email search functionality 
+const getOrderAndsearchEmail = async (req: Request, res: Response) => {
     try {
         const email = req.query.email || '';
-        const result = await OrderService.searchOrdersByEmailFromDb(email as string);
-        
+        const result = await OrderService.getOrderAndsearchEmailIntoDb(email as string);
+
         // send respone
         res.status(200).json({
             success: true,
@@ -49,5 +48,5 @@ const searchOrdersByEmail = async (req: Request, res: Response) => {
 
 export const OrderController = {
     createOrder,
-    searchOrdersByEmail
+    getOrderAndsearchEmail
 }

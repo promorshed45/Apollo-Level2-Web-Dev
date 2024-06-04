@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import { ProductService } from "./product.service";
 import productSchemaValidation from "./product.validation";
 
-
 // Create a New Product
 const createNewProduct = async (req: Request, res: Response) => {
     try {
@@ -26,10 +25,10 @@ const createNewProduct = async (req: Request, res: Response) => {
 }
 
 // Retrieve a List of All Products
-const getAllProducts = async (req: Request, res: Response) => {
+const getAllProductAndSearchTerm = async (req: Request, res: Response) => {
     try {
         const searchTerm = req.query.searchTerm || '';
-        const result = await ProductService.getAllProductFromDb(searchTerm as string);
+        const result = await ProductService.getAllProductAndSearchTermFromDb(searchTerm as string);
 
         // send respone
         res.status(200).json({
@@ -119,9 +118,8 @@ const deleteProductById = async (req: Request, res: Response) => {
 
 export const ProductController = {
     createNewProduct,
-    getAllProducts,
+    getAllProductAndSearchTerm,
     getProductById,
     updateProductById,
-    deleteProductById,
-    // searchProductByName
+    deleteProductById
 }

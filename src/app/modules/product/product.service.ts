@@ -9,7 +9,7 @@ const createdProducTtoDb = async (product: Product) => {
 }
 
 // Retrieve a List of All Products
-const getAllProductFromDb = async (searchTerm?: string) => {
+const getAllProductAndSearchTermFromDb = async (searchTerm?: string) => {
   const searchRegExp = searchTerm ? new RegExp(searchTerm, 'i') : '';
 
   const filter = {
@@ -21,7 +21,6 @@ const getAllProductFromDb = async (searchTerm?: string) => {
   }
 
   const products = await ProductModel.find(filter);
-
   return products;
 };
 
@@ -33,7 +32,7 @@ const getProductByIdFromDb = async (productId: string) => {
 
 // Update Product Information
 const updateProductByIdFromDb = async (productId: string, updateProduct: any) => {
-  const result = await ProductModel.findOneAndUpdate({ _id: productId }, updateProduct);
+  const result = await ProductModel.findByIdAndUpdate({ _id: productId }, updateProduct, {new: true});
   return result;
 }
 
@@ -43,15 +42,10 @@ const deletedProductByIdFromDb = async (productId: string) => {
   return result;
 }
 
-
-
-
-
 export const ProductService = {
   createdProducTtoDb,
-  getAllProductFromDb,
+  getAllProductAndSearchTermFromDb,
   getProductByIdFromDb,
   updateProductByIdFromDb,
-  deletedProductByIdFromDb,
-  // searchProductByPhoneNameFromDb
+  deletedProductByIdFromDb
 }

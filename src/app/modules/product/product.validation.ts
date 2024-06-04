@@ -1,9 +1,5 @@
 import { z } from 'zod';
 
-
-
-
-
 // Variant Schema added Zod validation
 const variantSchema = z.object({
     type: z.string().min(1, { message: 'Variant type is required' }),

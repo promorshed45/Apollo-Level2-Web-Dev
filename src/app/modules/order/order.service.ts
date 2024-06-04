@@ -2,10 +2,10 @@ import { ProductModel } from "../product/product.model";
 import { Order } from "./order.interface";
 import { OrderModel } from "./order.model";
 
+
+// create order & update inventory
 const createdOrderToDb = async (order: Order) => {
     try {
-
-
         // Check product is exists
         const product = await ProductModel.findById(order.productId);
 
@@ -41,7 +41,7 @@ const createdOrderToDb = async (order: Order) => {
 
 
 // Retrieve Orders by User Email
-const searchOrdersByEmailFromDb = async (email: string) => {
+const getOrderAndsearchEmailIntoDb = async (email: string) => {
     const searchRegExp = email ? new RegExp(email, 'i') : '';
 
   const filter = {
@@ -56,5 +56,5 @@ const searchOrdersByEmailFromDb = async (email: string) => {
 
 export const OrderService = {
     createdOrderToDb,
-    searchOrdersByEmailFromDb
+    getOrderAndsearchEmailIntoDb
 }
